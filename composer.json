@@ -1,0 +1,23 @@
+{
+    "name": "iwish/retailobjectsrestourant",
+    "description": "",
+    "authors": [
+        {
+            "name": "test",
+            "email": "test@test.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\RetailObjectsRestourant\\": ""
+        }
+    },
+    "type": "laravel-module"
+}

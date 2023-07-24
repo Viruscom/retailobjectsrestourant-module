@@ -1,0 +1,13 @@
+{
+    "name": "RetailObjectsRestourant",
+    "alias": "retailobjectsrestourant",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\RetailObjectsRestourant\\Providers\\RetailObjectsRestourantServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
