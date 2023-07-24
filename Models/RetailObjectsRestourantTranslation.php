@@ -9,12 +9,12 @@ use App\Traits\StorageActions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class RetailObjectsRestaurantTranslation extends Model implements CommonModelTranslationInterfaces
+class RetailObjectsRestourantTranslation extends Model implements CommonModelTranslationInterfaces
 {
     use StorageActions;
 
     protected $table    = "retail_object_restaurant_translation";
-    protected $fillable = ['locale', 'retail_object_id', 'title', 'url', 'announce', 'description', 'visible', 'address', 'email', 'phone', 'map_iframe'];
+    protected $fillable = ['locale', 'ro_id', 'title', 'url', 'announce', 'description', 'visible', 'address', 'email', 'phone', 'map_iframe'];
     public static function getLanguageArray($language, $request, $modelId, $isUpdate): array
     {
         $data = [
@@ -59,7 +59,7 @@ class RetailObjectsRestaurantTranslation extends Model implements CommonModelTra
     }
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(RetailObjectsRestourant::class, 'retail_object_id');
+        return $this->belongsTo(RetailObjectsRestourant::class, 'ro_id');
     }
     public function language(): BelongsTo
     {

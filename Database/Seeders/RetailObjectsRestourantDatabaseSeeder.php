@@ -2,8 +2,8 @@
 
 namespace Modules\RetailObjectsRestourant\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 class RetailObjectsRestourantDatabaseSeeder extends Seeder
 {
@@ -16,6 +16,6 @@ class RetailObjectsRestourantDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call(RetailObjectsRestaurantSettingsSeederTableSeeder::class);
     }
 }

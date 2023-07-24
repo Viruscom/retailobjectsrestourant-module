@@ -29,9 +29,10 @@ class RetailObjectsRestourant extends Model implements TranslatableContract, Com
     public static string $RETAIL_OBJECT_MIMES         = 'jpg,jpeg,png,gif';
     public static string $RETAIL_OBJECT_MAX_FILE_SIZE = '3000';
 
-    public array $translatedAttributes = ['title', 'url', 'announce', 'description', 'visible', 'address', 'email', 'phone', 'map_iframe'];
-    protected    $table                = "retail_objects_restaurant";
-    protected    $fillable             = ['filename', 'position', 'active'];
+    public array $translatedAttributes  = ['title', 'url', 'announce', 'description', 'visible', 'address', 'email', 'phone', 'map_iframe'];
+    protected    $table                 = "retail_objects_restaurant";
+    protected    $fillable              = ['filename', 'position', 'active'];
+    protected    $translationForeignKey = 'ro_id';
 
     public static function cacheUpdate(): void
     {
@@ -72,7 +73,7 @@ class RetailObjectsRestourant extends Model implements TranslatableContract, Com
     public static function getLangArraysOnStore($data, $request, $languages, $modelId, $isUpdate)
     {
         foreach ($languages as $language) {
-            $data[$language->code] = RetailObjectsRestaurantTranslation::getLanguageArray($language, $request, $modelId, $isUpdate);
+            $data[$language->code] = RetailObjectsRestourantTranslation::getLanguageArray($language, $request, $modelId, $isUpdate);
         }
 
         return $data;
@@ -114,7 +115,6 @@ class RetailObjectsRestourant extends Model implements TranslatableContract, Com
     {
         return Str::limit($this->announce, 255, ' ...');
     }
-
     public function headerGallery()
     {
         return $this->getHeaderGalleryRelation(get_class($this));
@@ -127,7 +127,6 @@ class RetailObjectsRestourant extends Model implements TranslatableContract, Com
     {
         return $this->hasOne(Seo::class, 'model_id')->where('model', get_class($this));
     }
-
     public function seo($languageSlug)
     {
         $seo = $this->seoFields;

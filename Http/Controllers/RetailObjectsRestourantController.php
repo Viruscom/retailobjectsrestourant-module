@@ -13,55 +13,55 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Modules\RetailObjects\Http\Requests\RetailObjectStoreRequest;
 use Modules\RetailObjects\Http\Requests\RetailObjectsUpdateRequest;
-use Modules\RetailObjects\Models\RetailObject;
-use Modules\RetailObjects\Models\RetailObjectTranslation;
+use Modules\RetailObjectsRestourant\Models\RetailObjectsRestourant;
+use Modules\RetailObjectsRestourant\Models\RetailObjectsRestourantTranslation;
 
 class RetailObjectsRestourantController extends Controller
 {
     public function index()
     {
         if (is_null(Cache::get(CacheKeysHelper::$RETAIL_OBJECT_RESTAURANT_ADMIN))) {
-            RetailObject::cacheUpdate();
+            RetailObjectsRestourant::cacheUpdate();
         }
 
-        return view('retailobjectsrestourant::admin.index', ['retailObjects' => Cache::get(CacheKeysHelper::$RETAIL_OBJECT_RESTAURANT_ADMIN)]);
+        return view('retailobjectsrestourant::admin.restaurants.index', ['retailObjects' => Cache::get(CacheKeysHelper::$RETAIL_OBJECT_RESTAURANT_ADMIN)]);
     }
     public function create()
     {
-        return view('retailobjectsrestourant::admin.create', [
+        return view('retailobjectsrestourant::admin.restaurants.create', [
             'languages'     => LanguageHelper::getActiveLanguages(),
-            'fileRulesInfo' => RetailObject::getUserInfoMessage()
+            'fileRulesInfo' => RetailObjectsRestourant::getUserInfoMessage()
         ]);
     }
     public function store(RetailObjectStoreRequest $request, CommonControllerAction $action): RedirectResponse
     {
         if ($request->has('image')) {
-            $request->validate(['image' => FileDimensionHelper::getRules('RetailObjects', 1)], FileDimensionHelper::messages('RetailObjects', 1));
+            $request->validate(['image' => FileDimensionHelper::getRules('RetailObjectsRestourant', 1)], FileDimensionHelper::messages('RetailObjectsRestourant', 1));
         }
-        $team = $action->doSimpleCreate(RetailObject::class, $request);
-        $action->updateUrlCache($team, RetailObjectTranslation::class);
+        $team = $action->doSimpleCreate(RetailObjectsRestourant::class, $request);
+        $action->updateUrlCache($team, RetailObjectsRestourantTranslation::class);
         $action->storeSeo($request, $team, 'RetailObjects');
-        RetailObject::cacheUpdate();
+        RetailObjectsRestourant::cacheUpdate();
 
         $team->storeAndAddNew($request);
 
-        return redirect()->route('admin.retail-objects.index')->with('success-message', trans('admin.common.successful_create'));
+        return redirect()->route('admin.retail-objects-restaurants.index')->with('success-message', trans('admin.common.successful_create'));
     }
     public function edit($id)
     {
-        $retailObject = RetailObject::whereId($id)->with('translations')->first();
+        $retailObject = RetailObjectsRestourant::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($retailObject);
 
-        return view('retailobjectsrestourant::admin.edit', [
+        return view('retailobjectsrestourant::admin.restaurants.edit', [
             'retailObject'  => $retailObject,
             'languages'     => LanguageHelper::getActiveLanguages(),
-            'fileRulesInfo' => RetailObject::getUserInfoMessage()
+            'fileRulesInfo' => RetailObjectsRestourant::getUserInfoMessage()
         ]);
     }
     public function deleteMultiple(Request $request, CommonControllerAction $action): RedirectResponse
     {
         if (!is_null($request->ids[0])) {
-            $action->deleteMultiple($request, RetailObject::class);
+            $action->deleteMultiple($request, RetailObjectsRestourant::class);
 
             return redirect()->back()->with('success-message', 'admin.common.successful_delete');
         }
@@ -70,75 +70,75 @@ class RetailObjectsRestourantController extends Controller
     }
     public function activeMultiple($active, Request $request, CommonControllerAction $action): RedirectResponse
     {
-        $action->activeMultiple(RetailObject::class, $request, $active);
-        RetailObject::cacheUpdate();
+        $action->activeMultiple(RetailObjectsRestourant::class, $request, $active);
+        RetailObjectsRestourant::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
     public function active($id, $active): RedirectResponse
     {
-        $retailObject = RetailObject::find($id);
+        $retailObject = RetailObjectsRestourant::find($id);
         MainHelper::goBackIfNull($retailObject);
 
         $retailObject->update(['active' => $active]);
-        RetailObject::cacheUpdate();
+        RetailObjectsRestourant::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
     public function update($id, RetailObjectsUpdateRequest $request, CommonControllerAction $action): RedirectResponse
     {
-        $retailObject = RetailObject::whereId($id)->with('translations')->first();
+        $retailObject = RetailObjectsRestourant::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($retailObject);
 
-        $action->doSimpleUpdate(RetailObject::class, RetailObjectTranslation::class, $retailObject, $request);
-        $action->updateUrlCache($retailObject, RetailObjectTranslation::class);
+        $action->doSimpleUpdate(RetailObjectsRestourant::class, RetailObjectsRestourantTranslation::class, $retailObject, $request);
+        $action->updateUrlCache($retailObject, RetailObjectsRestourantTranslation::class);
         $action->updateSeo($request, $retailObject, 'RetailObjects');
 
         if ($request->has('image')) {
-            $request->validate(['image' => FileDimensionHelper::getRules('RetailObjects', 1)], FileDimensionHelper::messages('RetailObjects', 1));
+            $request->validate(['image' => FileDimensionHelper::getRules('RetailObjectsRestourant', 1)], FileDimensionHelper::messages('RetailObjectsRestourant', 1));
             $retailObject->saveFile($request->image);
         }
 
-        RetailObject::cacheUpdate();
+        RetailObjectsRestourant::cacheUpdate();
 
-        return redirect()->route('admin.retail-objects.index')->with('success-message', 'admin.common.successful_edit');
+        return redirect()->route('admin.retail-objects-restaurants.index')->with('success-message', 'admin.common.successful_edit');
     }
     public function delete($id, CommonControllerAction $action): RedirectResponse
     {
-        $retailObject = RetailObject::where('id', $id)->first();
+        $retailObject = RetailObjectsRestourant::where('id', $id)->first();
         MainHelper::goBackIfNull($retailObject);
 
         $action->deleteFromUrlCache($retailObject);
-        $action->delete(RetailObject::class, $retailObject);
+        $action->delete(RetailObjectsRestourant::class, $retailObject);
 
         return redirect()->back()->with('success-message', 'admin.common.successful_delete');
     }
     public function positionUp($id, CommonControllerAction $action): RedirectResponse
     {
-        $retailObject = RetailObject::whereId($id)->with('translations')->first();
+        $retailObject = RetailObjectsRestourant::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($retailObject);
 
-        $action->positionUp(RetailObject::class, $retailObject);
-        RetailObject::cacheUpdate();
+        $action->positionUp(RetailObjectsRestourant::class, $retailObject);
+        RetailObjectsRestourant::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
     public function positionDown($id, CommonControllerAction $action): RedirectResponse
     {
-        $retailObject = RetailObject::whereId($id)->with('translations')->first();
+        $retailObject = RetailObjectsRestourant::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($retailObject);
 
-        $action->positionDown(RetailObject::class, $retailObject);
-        RetailObject::cacheUpdate();
+        $action->positionDown(RetailObjectsRestourant::class, $retailObject);
+        RetailObjectsRestourant::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
     public function deleteImage($id, CommonControllerAction $action): RedirectResponse
     {
-        $retailObject = RetailObject::find($id);
+        $retailObject = RetailObjectsRestourant::find($id);
         MainHelper::goBackIfNull($retailObject);
 
-        if ($action->imageDelete($retailObject, RetailObject::class)) {
+        if ($action->imageDelete($retailObject, RetailObjectsRestourant::class)) {
             return redirect()->back()->with('success-message', 'admin.common.successful_delete');
         }
 
