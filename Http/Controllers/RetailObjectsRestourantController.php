@@ -13,6 +13,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Modules\RetailObjects\Http\Requests\RetailObjectStoreRequest;
 use Modules\RetailObjects\Http\Requests\RetailObjectsUpdateRequest;
+use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantSettings;
 use Modules\RetailObjectsRestourant\Models\RetailObjectsRestourant;
 use Modules\RetailObjectsRestourant\Models\RetailObjectsRestourantTranslation;
 
@@ -25,13 +26,6 @@ class RetailObjectsRestourantController extends Controller
         }
 
         return view('retailobjectsrestourant::admin.restaurants.index', ['retailObjects' => Cache::get(CacheKeysHelper::$RETAIL_OBJECT_RESTAURANT_ADMIN)]);
-    }
-    public function create()
-    {
-        return view('retailobjectsrestourant::admin.restaurants.create', [
-            'languages'     => LanguageHelper::getActiveLanguages(),
-            'fileRulesInfo' => RetailObjectsRestourant::getUserInfoMessage()
-        ]);
     }
     public function store(RetailObjectStoreRequest $request, CommonControllerAction $action): RedirectResponse
     {
@@ -103,16 +97,6 @@ class RetailObjectsRestourantController extends Controller
 
         return redirect()->route('admin.retail-objects-restaurants.index')->with('success-message', 'admin.common.successful_edit');
     }
-    public function delete($id, CommonControllerAction $action): RedirectResponse
-    {
-        $retailObject = RetailObjectsRestourant::where('id', $id)->first();
-        MainHelper::goBackIfNull($retailObject);
-
-        $action->deleteFromUrlCache($retailObject);
-        $action->delete(RetailObjectsRestourant::class, $retailObject);
-
-        return redirect()->back()->with('success-message', 'admin.common.successful_delete');
-    }
     public function positionUp($id, CommonControllerAction $action): RedirectResponse
     {
         $retailObject = RetailObjectsRestourant::whereId($id)->with('translations')->first();
@@ -143,5 +127,53 @@ class RetailObjectsRestourantController extends Controller
         }
 
         return redirect()->back()->withErrors(['admin.image_not_found']);
+    }
+    public function storeDeliveryZone($id, Request $request)
+    {
+        $retailObject = RetailObjectsRestourant::find($id);
+        if (is_null($retailObject)) {
+            return response()->json(['error' => '1234']);
+        }
+
+        $deliveryZone = $retailObject->deliveryZone()->first();
+        if (!is_null($deliveryZone)) {
+            $deliveryZone->delete();
+        }
+        $retailObject->deliveryZone()->create(['polygon' => json_encode($request->polygon)]);
+
+        return response()->json(['success' => true]);
+    }
+    public function deliveryZone($id)
+    {
+        $retailObject = RetailObjectsRestourant::where('id', $id)->with('deliveryZone')->first();
+        MainHelper::goBackIfNull($retailObject);
+
+        $GOOGLE_MAPS_API_KEY = RetailObjectsRestaurantSettings::where('key', 'google_maps_api_key')->first();
+        if (is_null($GOOGLE_MAPS_API_KEY)) {
+            return redirect()->back()->withErrors(['Google Maps Api Key не е въведен. Въведете го от Ресторант настройки, за да продължите.']);
+        }
+
+        return view('retailobjectsrestourant::admin.restaurants.delivery_zone', [
+            'GOOGLE_MAPS_API_KEY' => $GOOGLE_MAPS_API_KEY->value,
+            'retailObject'        => $retailObject,
+
+        ]);
+    }
+    public function delete($id, CommonControllerAction $action): RedirectResponse
+    {
+        $retailObject = RetailObjectsRestourant::where('id', $id)->first();
+        MainHelper::goBackIfNull($retailObject);
+
+        $action->deleteFromUrlCache($retailObject);
+        $action->delete(RetailObjectsRestourant::class, $retailObject);
+
+        return redirect()->back()->with('success-message', 'admin.common.successful_delete');
+    }
+    public function create()
+    {
+        return view('retailobjectsrestourant::admin.restaurants.create', [
+            'languages'     => LanguageHelper::getActiveLanguages(),
+            'fileRulesInfo' => RetailObjectsRestourant::getUserInfoMessage()
+        ]);
     }
 }

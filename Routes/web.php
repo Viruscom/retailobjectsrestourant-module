@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], static function ()
             /* Restaurant Delivery Zone */
             Route::group(['prefix' => 'delivery-zone'], static function () {
                 Route::get('/', [RetailObjectsRestourantController::class, 'deliveryZone'])->name('admin.retail-objects-restaurants.delivery-zone.index');
+                Route::post('/map/store', [RetailObjectsRestourantController::class, 'storeDeliveryZone'])->name('admin.retail-objects-restaurants.delivery-zone.update');
             });
 
             /* Restaurant Working Time */
