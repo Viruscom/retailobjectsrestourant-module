@@ -18,5 +18,9 @@ class RetailObjectsRestaurantSettingsSeederTableSeeder extends Seeder
                                                     'key'   => 'google_maps_api_key',
                                                     'value' => '',
                                                 ]);
+        RetailObjectsRestaurantSettings::create([
+                                                    'key'   => 'google_geocoding_api_key',
+                                                    'value' => '',
+                                                ]);
     }
 }

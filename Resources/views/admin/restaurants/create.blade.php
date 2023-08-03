@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    @include('retailobjects::admin.breadcrumbs')
+    @include('retailobjectsrestourant::admin.breadcrumbs')
     @include('admin.notify')
     <form class="my-form" action="{{ route('admin.retail-objects-restaurants.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
         <span class="hidden curr-editor"></span>
@@ -39,15 +39,15 @@
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
                             <div class="row">
                                 <div class="col-md-6 col-xs-12">
-                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'title_' . $language->code, 'label' => trans('retailobjects::admin.title'), 'required' => true])
-                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'phone_' . $language->code, 'label' => trans('retailobjects::admin.phone'), 'required' => true])
+                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'title_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.title'), 'required' => true])
+                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'phone_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.phone'), 'required' => true])
                                 </div>
                                 <div class="col-md-6 col-xs-12">
-                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'address_' . $language->code, 'label' => trans('retailobjects::admin.address'), 'required' => true])
-                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'email_' . $language->code, 'label' => trans('retailobjects::admin.email'), 'required' => true])
+                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'address_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.address'), 'required' => true])
+                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'email_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.email'), 'required' => true])
                                 </div>
                                 <div class="col-md-12 col-xs-12">
-                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'map_iframe_' . $language->code, 'label' => trans('retailobjects::admin.map_iframe'), 'required' => true])
+                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'map_iframe_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.map_iframe'), 'required' => true])
                                 </div>
                             </div>
                             @include('admin.partials.on_create.form_fields.textarea_without_ckeditor', ['fieldName' => 'announce_' . $language->code, 'rows' => 4, 'label' => trans('admin.announce'), 'required' => false])

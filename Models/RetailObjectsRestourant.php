@@ -91,7 +91,7 @@ class RetailObjectsRestourant extends Model implements TranslatableContract, Com
 
     public function setKeys($array): array
     {
-        $array[1]['sys_image_name'] = trans('retailobjects::admin.index');
+        $array[1]['sys_image_name'] = trans('retailobjectsrestourant::admin.index');
         $array[1]['sys_image']      = self::$RETAIL_OBJECT_SYSTEM_IMAGE;
         $array[1]['sys_image_path'] = AdminHelper::getSystemImage(self::$RETAIL_OBJECT_SYSTEM_IMAGE);
         $array[1]['ratio']          = self::$RETAIL_OBJECT_RATIO;

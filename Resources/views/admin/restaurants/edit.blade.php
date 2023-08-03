@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    @include('retailobjects::admin.breadcrumbs')
+    @include('retailobjectsrestourant::admin.breadcrumbs')
     @include('admin.notify')
     <form class="my-form" action="{{ route('admin.retail-objects-restaurants.update', ['id' => $retailObject->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
         <span class="hidden curr-editor"></span>
@@ -42,18 +42,18 @@
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
                             <div class="row">
                                 <div class="col-md-6 col-xs-12">
-                                    @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'title_' . $language->code, 'label' => trans('retailobjects::admin.title'), 'required' => true, 'model' => $retailObjectTranslate])
-                                    @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'phone_' . $language->code, 'label' => trans('retailobjects::admin.phone'), 'required' => true, 'model' => $retailObjectTranslate])
+                                    @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'title_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.title'), 'required' => true, 'model' => $retailObjectTranslate])
+                                    @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'phone_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.phone'), 'required' => true, 'model' => $retailObjectTranslate])
                                 </div>
                                 <div class="col-md-6 col-xs-12">
-                                    @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'address_' . $language->code, 'label' => trans('retailobjects::admin.address'), 'required' => true, 'model' => $retailObjectTranslate])
-                                    @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'email_' . $language->code, 'label' => trans('retailobjects::admin.email'), 'required' => true, 'model' => $retailObjectTranslate])
+                                    @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'address_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.address'), 'required' => true, 'model' => $retailObjectTranslate])
+                                    @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'email_' . $language->code, 'label' => trans('retailobjectsrestourant::admin.email'), 'required' => true, 'model' => $retailObjectTranslate])
                                 </div>
                                 <div class="col-md-12 col-xs-12">
                                     <div class="form-group @if($errors->has('map_iframe_' . $language->code)) has-error @endif">
                                         <label class="control-label p-b-10">
                                             <span class="text-purple">* </span>
-                                            {{trans('retailobjects::admin.map_iframe')}} (<span class="text-uppercase">{{$language->code}}</span>):
+                                            {{trans('retailobjectsrestourant::admin.map_iframe')}} (<span class="text-uppercase">{{$language->code}}</span>):
                                         </label>
                                         <input class="form-control" type="text" name="{{'map_iframe_' . $language->code}}" value="{{ old('map_iframe_' . $language->code) ?: $retailObjectTranslate->map_iframe }}">
                                         @if($errors->has('map_iframe_' . $language->code))

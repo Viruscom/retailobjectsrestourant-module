@@ -13,8 +13,15 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\RetailObjectsRestourant\Http\Controllers\Admin\DeliveryZones\DeliveryZoneController;
+use Modules\RetailObjectsRestourant\Http\Controllers\Admin\ProductAdditives\ProductAdditivesController;
 use Modules\RetailObjectsRestourant\Http\Controllers\Admin\RetailObjectsRestaurantSettingsController;
+use Modules\RetailObjectsRestourant\Http\Controllers\Front\HomeController;
 use Modules\RetailObjectsRestourant\Http\Controllers\RetailObjectsRestourantController;
+
+/* Google Geocoding API */
+Route::group(['prefix' => 'geocoding'], static function () {
+    Route::get('get-address-coordinates', [HomeController::class, 'getAddressCoordinates'])->name('google.geocoding-api.get-address-coordinates');
+});
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], static function () {
 
@@ -60,6 +67,23 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], static function ()
             Route::group(['prefix' => 'working-time'], static function () {
                 Route::get('/', [RetailObjectsRestourantController::class, 'workingTime'])->name('admin.retail-objects-restaurants.working-time.index');
             });
+        });
+    });
+
+    /* Product additives */
+    Route::group(['prefix' => 'product_additives'], static function () {
+        Route::get('/', [ProductAdditivesController::class, 'index'])->name('admin.product.additives.index');
+        Route::get('/create', [ProductAdditivesController::class, 'create'])->name('admin.product.additives.create');
+        Route::post('/store', [ProductAdditivesController::class, 'store'])->name('admin.product.additives.store');
+
+        Route::group(['prefix' => 'multiple'], static function () {
+            Route::get('delete', [ProductAdditivesController::class, 'deleteMultiple'])->name('admin.product.additives.delete-multiple');
+        });
+
+        Route::group(['prefix' => '{id}'], static function () {
+            Route::get('edit', [ProductAdditivesController::class, 'edit'])->name('admin.product.additives.edit');
+            Route::post('update', [ProductAdditivesController::class, 'update'])->name('admin.product.additives.update');
+            Route::get('delete', [ProductAdditivesController::class, 'delete'])->name('admin.product.additives.delete');
         });
     });
 });

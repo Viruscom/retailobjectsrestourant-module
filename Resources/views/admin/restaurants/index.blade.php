@@ -52,11 +52,11 @@
                                 <?php $i++; ?>
                         @endforeach
                         <tr style="display: none;">
-                            <td colspan="5" class="no-table-rows">{{ trans('retailobjects::admin.no_records') }}</td>
+                            <td colspan="5" class="no-table-rows">{{ trans('retailobjectsrestourant::admin.no_records') }}</td>
                         </tr>
                     @else
                         <tr>
-                            <td colspan="5" class="no-table-rows">{{ trans('retailobjects::admin.no_records') }}</td>
+                            <td colspan="5" class="no-table-rows">{{ trans('retailobjectsrestourant::admin.no_records') }}</td>
                         </tr>
                     @endif
                     </tbody>
