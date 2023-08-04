@@ -78,7 +78,7 @@
                 <div class="form form-horizontal">
                     <div class="form-body">
                         <hr>
-                        @include('admin.partials.on_edit.form_fields.upload_file', ['model' => $retailObject, 'deleteRoute' => route('admin.retail-objects.delete-image', ['id'=>$retailObject->id])])
+                        @include('admin.partials.on_edit.form_fields.upload_file', ['model' => $retailObject, 'deleteRoute' => route('admin.retail-objects-restaurants.delete-image', ['id'=>$retailObject->id])])
                         @include('admin.partials.on_edit.active_checkbox', ['model' => $retailObject])
                     </div>
                     @include('admin.partials.on_edit.form_actions_bottom')

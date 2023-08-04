@@ -5,17 +5,17 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="{{ route('admin.products.characteristics.index') }}" class="text-black">{{ __('shop::admin.product_characteristics.index') }}</a>
+            <a href="{{ route('admin.product.additives.index') }}" class="text-black">{{ __('retailobjectsrestourant::admin.product_additives.index') }}</a>
         </li>
-        @if(url()->current() === route('admin.products.characteristics.create'))
+        @if(url()->current() === route('admin.product.additives.create'))
             <li>
                 <i class="fa fa-angle-right"></i>
-                <a href="{{ route('admin.products.characteristics.create') }}" class="text-purple">{{ __('shop::admin.product_characteristics.create') }}</a>
+                <a href="{{ route('admin.product.additives.create') }}" class="text-purple">{{ __('retailobjectsrestourant::admin.product_additives.create') }}</a>
             </li>
-        @elseif(Request::segment(4) !== null && url()->current() === route('admin.products.edit', ['id' => Request::segment(4)]))
+        @elseif(Request::segment(4) !== null && url()->current() === route('admin.product.additives.edit', ['id' => Request::segment(4)]))
             <li>
                 <i class="fa fa-angle-right"></i>
-                <a href="{{ route('admin.products.characteristics.edit', ['id' => Request::segment(4)]) }}" class="text-purple">{{ __('shop::admin.product_characteristics.edit') }}</a>
+                <a href="{{ route('admin.product.additives.edit', ['id' => Request::segment(4)]) }}" class="text-purple">{{ __('retailobjectsrestourant::admin.product_additives.edit') }}</a>
             </li>
         @endif
     </ul>

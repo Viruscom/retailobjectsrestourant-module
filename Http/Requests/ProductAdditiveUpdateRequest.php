@@ -57,4 +57,10 @@ class ProductAdditiveUpdateRequest extends FormRequest
 
         return $messages;
     }
+    protected function prepareForValidation()
+    {
+        $this->merge([
+                         'price' => str_replace(',', '.', $this->price),
+                     ]);
+    }
 }

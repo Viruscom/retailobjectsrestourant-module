@@ -1,13 +1,12 @@
 @extends('layouts.admin.app')
 
 @section('content')
-    @include('shop::admin.products.characteristics.breadcrumbs')
+    @include('retailobjectsrestourant::admin.product_additives.breadcrumbs')
     @include('admin.notify')
 
-    <form class="my-form" action="{{ route('admin.products.characteristics.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data">
+    <form class="my-form" action="{{ route('admin.product.additives.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data">
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="position" value="{{old('position')}}">
 
             @include('admin.partials.on_create.form_actions_top')
         </div>
@@ -25,7 +24,7 @@
                         @endphp
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
                             <div class="form-group @if($errors->has($langTitle)) has-error @endif">
-                                <label class="control-label p-b-10">Заглавие (<span class="text-uppercase">{{$language->code}}</span>):</label>
+                                <label class="control-label p-b-10">{{ __('retailobjectsrestourant::admin.product_additives.title') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                 <input class="form-control" type="text" name="{{$langTitle}}" value="{{ old($langTitle) }}">
                                 @if($errors->has($langTitle))
                                     <span class="help-block">{{ trans($errors->first($langTitle)) }}</span>
@@ -37,42 +36,18 @@
                 <div class="form form-horizontal">
                     <div class="form-body">
                         <hr>
-                        <div style="display: flex; justify-content: space-between;border-bottom: 2px solid #cecece;">
-                            <h4>Асоциирай към продуктова категория</h4>
-                            <div style="display: flex;">
-                                <div class="checkbox-all pull-left p-10 p-l-0">
-                                    <div class="pretty p-default p-square">
-                                        <input type="checkbox" id="selectAll" class="tooltips" data-toggle="tooltip" data-placement="auto" data-original-title="Маркира/Демаркира всички катеегории" data-trigger="hover"/>
-                                        <div class="state p-primary">
-                                            <label>Маркирай/Демаркирай всички категории</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-md-6">
+                            @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'price', 'label' => trans('retailobjectsrestourant::admin.product_additives.price'), 'required' => true])
                         </div>
-                        <div style="display: flex;" class="m-t-20">
-                            @forelse($productCategories as $category)
-                                <div class="pretty p-default p-square">
-                                    <input type="checkbox" class="checkbox-row" name="productCategories[]" value="{{$category->id}}"{{ old('productCategories') ? (in_array($category->id, old('productCategories')) ? 'checked':''):'' }}/>
-                                    <div class="state p-primary">
-                                        <label>{{ $category->title }}</label>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="alert alert-warning">Няма добавени или активни категории</div>
-                            @endforelse
-                        </div>
-                        <hr>
-                        @include('admin.partials.on_create.active_checkbox')
-                        <hr>
-                        @include('admin.partials.on_create.position_in_site_button')
                     </div>
 
-                    @include('admin.partials.on_create.form_actions_bottom')
+                    <div class="row">
+                        <div class="col-md-12">
+                            @include('admin.partials.on_create.form_actions_bottom')
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            @include('admin.partials.modals.positions_on_create', ['parent' => $characteristics])
         </div>
     </form>
 @endsection

@@ -7,7 +7,7 @@
         <li>
             <a href="{{ route('admin.retail-objects-restaurants.index') }}" class="text-black">@lang('retailobjectsrestourant::admin.restaurants.index')</a>
         </li>
-        @if(url()->current() === route('admin.retail-objects.create'))
+        @if(url()->current() === route('admin.retail-objects-restaurants.create'))
             <li>
                 <i class="fa fa-angle-right"></i>
                 <a href="{{ route('admin.retail-objects-restaurants.create') }}" class="text-purple">{{ __('retailobjectsrestourant::admin.restaurants.create') }}</a>

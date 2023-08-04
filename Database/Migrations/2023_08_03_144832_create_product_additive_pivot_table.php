@@ -18,9 +18,9 @@ class CreateProductAdditivePivotTable extends Migration
             $table->unsignedBigInteger('product_additive_id');
             $table->unsignedBigInteger('product_id');
             $table->decimal('price', 10, 2);
-            $table->decimal('quantity', 10, 2);
+            $table->decimal('quantity', 10, 2)->default(0.00);
+            $table->boolean('in_without_list')->default(false);
 
-            $table->unique(['product_additive_id', 'product_id']);
             $table->foreign('product_additive_id')->references('id')->on('product_additives')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

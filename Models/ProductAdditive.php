@@ -43,6 +43,10 @@ class ProductAdditive extends Model implements TranslatableContract
 
         return $data;
     }
+    public static function generatePosition($request): int
+    {
+        return 1;
+    }
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

@@ -1,12 +1,11 @@
 @extends('layouts.admin.app')
 
 @section('content')
-    @include('shop::admin.products.characteristics.breadcrumbs')
+    @include('retailobjectsrestourant::admin.product_additives.breadcrumbs')
     @include('admin.notify')
-    <form class="my-form" action="{{ route('admin.products.characteristics.update', ['id'=>$productCharacteristic->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data">
+    <form class="my-form" action="{{ route('admin.product.additives.update', ['id'=>$productCharacteristic->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data">
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="position" value="{{(old('position')) ?: $productCharacteristic->position}}">
 
             <div class="bg-grey top-search-bar">
                 <div class="action-mass-buttons pull-right">
@@ -42,42 +41,18 @@
                 <div class="form form-horizontal">
                     <div class="form-body">
                         <hr>
-                        <div style="display: flex; justify-content: space-between;border-bottom: 2px solid #cecece;">
-                            <h4>Асоциирай към продуктова категория</h4>
-                            <div style="display: flex;">
-                                <div class="checkbox-all pull-left p-10 p-l-0">
-                                    <div class="pretty p-default p-square">
-                                        <input type="checkbox" id="selectAll" class="tooltips" data-toggle="tooltip" data-placement="auto" data-original-title="Маркира/Демаркира всички катеегории" data-trigger="hover"/>
-                                        <div class="state p-primary">
-                                            <label>Маркирай/Демаркирай всички категории</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-md-6">
+                            @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'price', 'label' => trans('retailobjectsrestourant::admin.product_additives.price'), 'required' => true, 'model' => $productCharacteristic])
                         </div>
-                        <div style="display: flex;" class="m-t-20">
-                            @forelse($productCategories as $category)
-                                <div class="pretty p-default p-square">
-                                    <input type="checkbox" class="checkbox-row" name="productCategories[]" value="{{$category->id}}" {{ in_array($category->id, $selectedProductCategories) ? 'checked':'' }}/>
-                                    <div class="state p-primary">
-                                        <label>{{ $category->title }}</label>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="alert alert-warning">Няма добавени или активни категории</div>
-                            @endforelse
-                        </div>
-                        <hr>
-                        @include('admin.partials.on_edit.active_checkbox', ['model' => $productCharacteristic])
-                        <hr>
-                        @include('admin.partials.on_edit.position_in_site_button', ['model' => $productCharacteristic, 'models' => $characteristics])
                     </div>
 
-                    @include('admin.partials.on_edit.form_actions_bottom')
+                    <div class="row">
+                        <div class="col-md-12">
+                            @include('admin.partials.on_create.form_actions_bottom')
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            @include('admin.partials.modals.positions_on_edit', ['parent' => $characteristics, 'model' => $productCharacteristic])
         </div>
     </form>
 @endsection

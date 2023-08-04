@@ -10,13 +10,11 @@ use App\Helpers\WebsiteHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Modules\RetailObjectsRestourant\Http\Requests\ProductAdditiveStoreRequest;
+use Modules\RetailObjectsRestourant\Http\Requests\ProductAdditiveUpdateRequest;
 use Modules\RetailObjectsRestourant\Models\ProductAdditive;
-use Modules\Shop\Http\Requests\ProductCharacteristicRequest;
-use Modules\Shop\Models\Admin\ProductCategory\Category;
-use Modules\Shop\Models\Admin\Products\ProductCharacteristicPivot;
-use Modules\Shop\Models\Admin\Products\ProductCharacteristicTranslation;
+use Modules\RetailObjectsRestourant\Models\ProductAdditiveTranslation;
 
 class ProductAdditivesController extends Controller
 {
@@ -28,13 +26,13 @@ class ProductAdditivesController extends Controller
 
         return view('retailobjectsrestourant::admin.product_additives.index', ['characteristics' => Cache::get(CacheKeysHelper::$SHOP_PRODUCT_ADDITIVES)]);
     }
-    public function store(ProductCharacteristicRequest $request, CommonControllerAction $action)
+    public function store(ProductAdditiveStoreRequest $request, CommonControllerAction $action)
     {
         $productAdditive = $action->doSimpleCreate(ProductAdditive::class, $request);
         ProductAdditive::cacheUpdate();
         $productAdditive->storeAndAddNew($request);
 
-        return redirect()->route('admin.products.characteristics.index')->with('success-message', trans('admin.common.successful_create'));
+        return redirect()->route('admin.product.additives.index')->with('success-message', trans('admin.common.successful_create'));
     }
     public function edit($id)
     {
@@ -45,70 +43,57 @@ class ProductAdditivesController extends Controller
             ProductAdditive::cacheUpdate();
         }
 
-        return view('shop::admin.products.characteristics.edit', [
-            'productCharacteristic'     => $productAdditive,
-            'languages'                 => LanguageHelper::getActiveLanguages(),
-            'characteristics'           => Cache::get('adminProductCharacteristics'),
-            'productCategories'         => Category::with('translations')->get(),
-            'selectedProductCategories' => Arr::flatten(ProductCharacteristicPivot::select('product_category_id')->where('product_characteristic_id', $productAdditive->id)->get()->toArray())
+        return view('retailobjectsrestourant::admin.product_additives.edit', [
+            'productCharacteristic' => $productAdditive,
+            'languages'             => LanguageHelper::getActiveLanguages(),
         ]);
     }
     public function deleteMultiple(Request $request, CommonControllerAction $action): RedirectResponse
     {
         if (!is_null($request->ids[0])) {
-            $action->deleteMultiple($request, ProductAdditive::class);
+            $ids = array_map('intval', explode(',', $request->ids[0]));
+            foreach ($ids as $id) {
+                $model = ProductAdditive::find($id);
+                if (is_null($model)) {
+                    continue;
+                }
+
+                $model->delete();
+            }
+
+            ProductAdditive::cacheUpdate();
 
             return redirect()->back()->with('success-message', 'admin.common.successful_delete');
         }
 
         return redirect()->back()->withErrors(['admin.common.no_checked_checkboxes']);
     }
-    public function update($id, ProductCharacteristicRequest $request, CommonControllerAction $action): RedirectResponse
-    {
-        $productAdditive = ProductAdditive::find($id);
-        if (is_null($productAdditive)) {
-            return redirect()->back()->withInput()->withErrors(['administration_messages.page_not_found']);
-        }
-
-        //        $request['position'] = $productAdditive->updatedPosition($request);
-        $action->doSimpleUpdate(ProductAdditive::class, ProductCharacteristicTranslation::class, $productAdditive, $request);
-
-        if ($request->has('productCategories')) {
-            ProductCharacteristicPivot::where('product_characteristic_id', $productAdditive->id)->delete();
-            foreach ($request->productCategories as $key => $productCategoryId) {
-                ProductCharacteristicPivot::create([
-                                                       'product_characteristic_id' => $productAdditive->id,
-                                                       'product_category_id'       => $productCategoryId
-                                                   ]);
-            }
-        }
-
-        ProductAdditive::cacheUpdate();
-
-        return redirect()->route('admin.products.characteristics.index')->with('success-message', 'admin.common.successful_edit');
-    }
     public function delete($id, CommonControllerAction $action): RedirectResponse
     {
         $productAdditive = ProductAdditive::where('id', $id)->first();
         MainHelper::goBackIfNull($productAdditive);
 
-        $action->delete(ProductAdditive::class, $productAdditive);
+        $productAdditive->delete();
+        ProductAdditive::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_delete');
     }
-    public function create()
+    public function update($id, ProductAdditiveUpdateRequest $request, CommonControllerAction $action): RedirectResponse
     {
-        if (is_null(Cache::get(CacheKeysHelper::$SHOP_PRODUCT_ADDITIVES))) {
-            ProductAdditive::cacheUpdate();
-        }
-        if (is_null(Cache::get(CacheKeysHelper::$SHOP_PRODUCT_CATEGORY_ADMIN))) {
-            Category::cacheUpdate();
+        $productAdditive = ProductAdditive::find($id);
+        if (is_null($productAdditive)) {
+            return redirect()->back()->withInput()->withErrors(['admin.common.record_not_found']);
         }
 
-        return view('shop::admin.products.characteristics.create', [
-            'languages'         => LanguageHelper::getActiveLanguages(),
-            'characteristics'   => Cache::get(CacheKeysHelper::$SHOP_PRODUCT_ADDITIVES),
-            'productCategories' => Cache::get(CacheKeysHelper::$SHOP_PRODUCT_CATEGORY_ADMIN)
+        $action->doSimpleUpdate(ProductAdditive::class, ProductAdditiveTranslation::class, $productAdditive, $request);
+        ProductAdditive::cacheUpdate();
+
+        return redirect()->route('admin.product.additives.index')->with('success-message', 'admin.common.successful_edit');
+    }
+    public function create()
+    {
+        return view('retailobjectsrestourant::admin.product_additives.create', [
+            'languages' => LanguageHelper::getActiveLanguages()
         ]);
     }
 }
