@@ -16,6 +16,7 @@ use App\Traits\StorageActions;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Modules\RetailObjectsRestourant\Models\DeliveryZones\DeliveryZone;
@@ -153,5 +154,10 @@ class RetailObjectsRestourant extends Model implements TranslatableContract, Com
     public function deliveryZone(): HasOne
     {
         return $this->hasOne(DeliveryZone::class, 'ro_id', 'id');
+    }
+
+    public function workloads(): HasMany
+    {
+        return $this->hasMany(RetailObjectsRestaurantWorkload::class, 'ro_id', 'id');
     }
 }

@@ -2,9 +2,7 @@
 
 namespace Modules\RetailObjectsRestourant\Models;
 
-use App\Helpers\CacheKeysHelper;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 
 class RetailObjectsRestaurantWorkload extends Model
 {
@@ -16,13 +14,19 @@ class RetailObjectsRestaurantWorkload extends Model
     public const WORKLOAD_STATUS_ORDERS_STOPPED = 6;
 
     protected $table    = 'retail_objects_restaurant_workload';
-    protected $fillable = ['day_of_week', 'from_hour', 'to_hour', 'has_extraordinary_status', 'extraordinary_status'];
+    protected $fillable = ['ro_id', 'day_of_week', 'workload_status', 'from_hour', 'to_hour', 'has_extraordinary_status', 'extraordinary_status'];
     public static function cacheUpdate()
     {
-        Cache::forget(CacheKeysHelper::$SHOP_PRODUCT_ADDITIVES);
 
-        return Cache::rememberForever(CacheKeysHelper::$SHOP_PRODUCT_ADDITIVES, static function () {
-            return self::with('translations')->get();
-        });
+    }
+    public static function getWorkloadStatuses(): array
+    {
+        return [
+            self::WORKLOAD_STATUS_WEAK,
+            self::WORKLOAD_STATUS_MODERATELY,
+            self::WORKLOAD_STATUS_STRONG,
+            self::WORKLOAD_STATUS_VERY_STRONG,
+            self::WORKLOAD_STATUS_CLOSED,
+        ];
     }
 }

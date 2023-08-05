@@ -13,7 +13,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Modules\RetailObjects\Http\Requests\RetailObjectStoreRequest;
 use Modules\RetailObjects\Http\Requests\RetailObjectsUpdateRequest;
+use Modules\RetailObjectsRestourant\Http\Requests\WorkloadRequest;
 use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantSettings;
+use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantWorkload;
 use Modules\RetailObjectsRestourant\Models\RetailObjectsRestourant;
 use Modules\RetailObjectsRestourant\Models\RetailObjectsRestourantTranslation;
 
@@ -179,9 +181,43 @@ class RetailObjectsRestourantController extends Controller
 
     public function workload($id)
     {
+        $retailObject = RetailObjectsRestourant::where('id', $id)->with('workloads')->first();
+        MainHelper::goBackIfNull($retailObject);
+        $workloadData = $retailObject->workloads->groupBy('workload_status');
+
+        return view('retailobjectsrestourant::admin.restaurants.workload', compact('retailObject', 'workloadData'));
+    }
+
+    public function workloadUpdate($id, WorkloadRequest $request)
+    {
         $retailObject = RetailObjectsRestourant::where('id', $id)->first();
         MainHelper::goBackIfNull($retailObject);
 
-        return view('retailobjectsrestourant::admin.restaurants.workload', compact('retailObject'));
+        $workloadData = $request->input('workload');
+
+        // Обхождане на всеки ден от седмицата
+        foreach ($workloadData as $workloadStatus => $workloads) {
+            // Обхождане на всеки интервал от време за деня
+            foreach ($workloads as $dayOfWeek => $workload) {
+                // Подготовка на данните за обновление или вмъкване
+                $data = [
+                    'ro_id'                    => $retailObject->id,
+                    'day_of_week'              => $dayOfWeek,
+                    'from_hour'                => $workload["form_time"],
+                    'to_hour'                  => $workload["to_time"],
+                    'workload_status'          => $workloadStatus,
+                    'has_extraordinary_status' => false,
+                ];
+
+                RetailObjectsRestaurantWorkload::updateOrCreate(
+                    ['ro_id' => $retailObject->id, 'day_of_week' => $dayOfWeek, 'workload_status' => $workloadStatus],
+                    $data
+                );
+            }
+        }
+
+        RetailObjectsRestaurantWorkload::cacheUpdate();
+
+        return redirect()->back()->with('success-message', 'Работната натовареност е обновена успешно.');
     }
 }
