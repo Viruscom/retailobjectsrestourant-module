@@ -77,7 +77,23 @@
                 @include('admin.partials.on_edit.seo', ['model' => $retailObject->seoFields])
                 <div class="form form-horizontal">
                     <div class="form-body">
-                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>{{ __('retailobjectsrestourant::admin.restaurants_working_time.index') }}</h3>
+                            </div>
+                        </div>
+                        <div class="row p-0 m-0">
+                            <div class="col-xs-12 col-md-6 p-r-30">
+                                @include('admin.partials.on_edit.form_fields.input_text_without_lang', ['fieldName' => 'working_time_mon_fri', 'label' => trans('retailobjectsrestourant::admin.restaurants.working_time_mon_fri'), 'required' => true, 'model' => $retailObject])
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                @include('admin.partials.on_edit.form_fields.input_text_without_lang', ['fieldName' => 'working_time_saturday', 'label' => trans('retailobjectsrestourant::admin.restaurants.working_time_saturday'), 'required' => true, 'model' => $retailObject])
+                                @include('admin.partials.on_edit.form_fields.input_text_without_lang', ['fieldName' => 'working_time_sunday', 'label' => trans('retailobjectsrestourant::admin.restaurants.working_time_sunday'), 'required' => true, 'model' => $retailObject])
+                            </div>
+                        </div>
+                        <div class="row">
+                            <hr>
+                        </div>
                         @include('admin.partials.on_edit.form_fields.upload_file', ['model' => $retailObject, 'deleteRoute' => route('admin.retail-objects-restaurants.delete-image', ['id'=>$retailObject->id])])
                         @include('admin.partials.on_edit.active_checkbox', ['model' => $retailObject])
                     </div>

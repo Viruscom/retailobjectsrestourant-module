@@ -17,6 +17,27 @@ class ProductAdditivePivot extends Model
         'quantity',
         'in_without_list'
     ];
+    public static function updateAdditives(Product $product, array $selectedAdditives, array $selectedAdditivesWithoutList)
+    {
+        self::storeAdditive($product, $selectedAdditives, false);
+        self::storeAdditive($product, $selectedAdditivesWithoutList, true);
+    }
+
+    protected static function storeAdditive($product, $list, $isWithoutList)
+    {
+        foreach ($list as $additiveId) {
+            $additive = ProductAdditive::find($additiveId);
+            if (is_null($additive)) {
+                continue;
+            }
+            ProductAdditivePivot::create([
+                                             'product_additive_id' => $additive->id,
+                                             'product_id'          => $product->id,
+                                             'price'               => $additive->price,
+                                             'in_without_list'     => $isWithoutList,
+                                         ]);
+        }
+    }
 
     public function productAdditive(): BelongsTo
     {

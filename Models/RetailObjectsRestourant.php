@@ -33,7 +33,7 @@ class RetailObjectsRestourant extends Model implements TranslatableContract, Com
 
     public array $translatedAttributes  = ['title', 'url', 'announce', 'description', 'visible', 'address', 'email', 'phone', 'map_iframe'];
     protected    $table                 = "retail_objects_restaurant";
-    protected    $fillable              = ['filename', 'position', 'active'];
+    protected    $fillable              = ['filename', 'position', 'active', 'working_time_mon_fri', 'working_time_saturday', 'working_time_sunday'];
     protected    $translationForeignKey = 'ro_id';
 
     public static function cacheUpdate(): void
@@ -68,6 +68,18 @@ class RetailObjectsRestourant extends Model implements TranslatableContract, Com
 
         if ($request->hasFile('image')) {
             $data['filename'] = pathinfo(CommonActions::getValidFilenameStatic($request->image->getClientOriginalName()), PATHINFO_FILENAME) . '.' . $request->image->getClientOriginalExtension();
+        }
+
+        if ($request->has('working_time_mon_fri')) {
+            $data['working_time_mon_fri'] = $request->working_time_mon_fri;
+        }
+
+        if ($request->has('working_time_saturday')) {
+            $data['working_time_saturday'] = $request->working_time_saturday;
+        }
+
+        if ($request->has('working_time_sunday')) {
+            $data['working_time_sunday'] = $request->working_time_sunday;
         }
 
         return $data;

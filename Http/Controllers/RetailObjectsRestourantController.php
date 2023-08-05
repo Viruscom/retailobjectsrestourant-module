@@ -176,4 +176,12 @@ class RetailObjectsRestourantController extends Controller
             'fileRulesInfo' => RetailObjectsRestourant::getUserInfoMessage()
         ]);
     }
+
+    public function workload($id)
+    {
+        $retailObject = RetailObjectsRestourant::where('id', $id)->first();
+        MainHelper::goBackIfNull($retailObject);
+
+        return view('retailobjectsrestourant::admin.restaurants.workload', compact('retailObject'));
+    }
 }

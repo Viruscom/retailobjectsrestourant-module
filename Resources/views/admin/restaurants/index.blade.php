@@ -35,7 +35,7 @@
                                 <td>{{ $retailObject->email }}</td>
                                 <td class="pull-right">
                                     <a href="{{ route('admin.retail-objects-restaurants.delivery-zone.index', ['id' => $retailObject->id]) }}" class="btn btn-blue tooltips" role="button" data-toggle="tooltip" data-placement="auto" title="" data-original-title="{{ __('retailobjectsrestourant::admin.restaurants_delivery_zone.index') }}"><i class="fas fa-map-marked-alt"></i></a>
-                                    <a href="{{ route('admin.retail-objects-restaurants.working-time.index', ['id' => $retailObject->id]) }}" class="btn btn-light-purple m-b-0 tooltips" role="button" data-toggle="tooltip" data-placement="auto" title="" data-original-title="{{ __('retailobjectsrestourant::admin.restaurants_working_time.index') }}"><i class="fas fa-calendar-alt"></i></a>
+                                    <a href="{{ route('admin.retail-objects-restaurants.workload.index', ['id' => $retailObject->id]) }}" class="btn btn-light-purple m-b-0 tooltips" role="button" data-toggle="tooltip" data-placement="auto" title="" data-original-title="{{ __('retailobjectsrestourant::admin.restaurants_working_time.index') }}"><i class="fas fa-calendar-alt"></i></a>
 
                                     @include('admin.partials.index.action_buttons', ['mainRoute' => Request::segment(2), 'models' => $retailObjects, 'model' => $retailObject, 'showInPublicModal' => false])
                                 </td>

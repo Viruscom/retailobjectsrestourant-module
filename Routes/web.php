@@ -63,9 +63,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], static function ()
                 Route::post('/map/store', [RetailObjectsRestourantController::class, 'storeDeliveryZone'])->name('admin.retail-objects-restaurants.delivery-zone.update');
             });
 
-            /* Restaurant Working Time */
-            Route::group(['prefix' => 'working-time'], static function () {
-                Route::get('/', [RetailObjectsRestourantController::class, 'workingTime'])->name('admin.retail-objects-restaurants.working-time.index');
+            /* Restaurant Workload */
+            Route::group(['prefix' => 'workload'], static function () {
+                Route::get('/', [RetailObjectsRestourantController::class, 'workload'])->name('admin.retail-objects-restaurants.workload.index');
             });
         });
     });

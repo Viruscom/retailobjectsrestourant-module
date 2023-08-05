@@ -98,6 +98,25 @@
     var selectionAdditivesListFinal = [];
     var selectedWithoutListFinal    = [];
 
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectedProductsAdditives        = {!! json_encode($selectedProductsAdditives) !!};
+        var selectedWithoutProductsAdditives = {!! json_encode($selectedWithoutProductsAdditives) !!};
+
+        // Избиране на добавките от selectedProductsAdditives
+        selectedProductsAdditives.forEach(function (additive) {
+            var item = $('#additivesList li[data-index="' + additive.id + '"]');
+            addAdditiveToList(item, $('#selectedAdditivesList'), $('#additivesList'), selectionAdditivesListFinal);
+        });
+
+        // Избиране на добавките от selectedWithoutProductsAdditives
+        selectedWithoutProductsAdditives.forEach(function (additive) {
+            var item = $('#withoutList li[data-index="' + additive.id + '"]');
+            addAdditiveToList(item, $('#selectedWithoutList'), $('#withoutList'), selectedWithoutListFinal);
+        });
+
+        // Тук може да добавите останалите части от вашия код
+    });
+
     function addAdditiveToList(additive, selectedList, initialList, selectedArray) {
         var id = additive.data('index');
         selectedArray.push(id);

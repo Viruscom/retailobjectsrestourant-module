@@ -8,11 +8,15 @@ return [
     'map_iframe' => 'Сорс към Google карта',
 
     'restaurants'               => [
-        'index'      => 'Ресторанти',
-        'create'     => 'Добавяне на ресторант',
-        'edit'       => 'Редактиране на ресторант',
-        'restourant' => 'Ресторант',
-        'email'      => 'E-mail'
+        'index'                 => 'Ресторанти',
+        'create'                => 'Добавяне на ресторант',
+        'edit'                  => 'Редактиране на ресторант',
+        'restourant'            => 'Ресторант',
+        'email'                 => 'E-mail',
+        'working_time'          => 'Работно време',
+        'working_time_mon_fri'  => 'понеделник-петък',
+        'working_time_saturday' => 'събота',
+        'working_time_sunday'   => 'неделя',
     ],
     'retail_object'             => 'Обекти',
     'delivery_zones'            => 'Зони на доставка',
