@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@php use Modules\RetailObjectsRestourant\Http\Requests\RestaurantPriorityUpdateRequest;use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantWorkload; @endphp@extends('layouts.admin.app')
 
 @section('content')
     @include('retailobjectsrestourant::admin.restaurants.breadcrumbs')

@@ -16,9 +16,10 @@
                 <h3>Натоваренст за ресторант: <strong>{{ $retailObject->title }}</strong></h3><br>
             </div>
         </div>
+ 
         <div class="row">
             @foreach([0,1,2,3,4,5,6] as $dayOfWeek)
-                <div class="col-xs-12 col-md-6 m-b-40">
+                <div class="col-xs-12 col-md-4 m-b-40">
                     <div><h3>Натовареност за <b><i>{{ Carbon::now()->startOfWeek()->addDays($dayOfWeek)->locale(config('default.app.language.code'))->dayName }}</i></b></h3></div>
                     <div>
                         <table style="width: 100%;">

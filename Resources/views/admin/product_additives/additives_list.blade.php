@@ -2,53 +2,57 @@
     <div class="col-md-12">
         <h3 class="m-t-40 m-b-20"> Добавки</h3>
     </div>
-    <div class="col-md-6 col-xs-12 p-r-30">
-        <div class="row">
-            <h5>Списък ДОБАВКИ</h5>
+    <div class="col-md-12 col-xs-12">
+        <div class="col-md-6 col-xs-12 p-r-30">
+            <div class="row">
+                <h5>Списък ДОБАВКИ</h5>
+            </div>
+            <div class="form-group ">
+                <input class="form-control width-p100" type="text" id="searchAdditives" placeholder="Търсене...">
+            </div>
+            @if(!empty($productAdditives))
+                <ul id="additivesList" class="additives-list form-group">
+                    @foreach($productAdditives as $productAdditive)
+                        <li data-index="{{$productAdditive->id}}"><span>{{ $productAdditive->title }}</span><span>{{ $productAdditive->price }}</span></li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
-        <div class="form-group ">
-            <input class="form-control width-p100" type="text" id="searchAdditives" placeholder="Търсене...">
+        <div class="col-md-6 col-xs-12">
+            <div class="row">
+                <h5>Избрани добавки</h5>
+            </div>
+            <div class="form-group ">
+                <input class="form-control width-p100" type="text" id="searchSelectedAdditivesList" placeholder="Търсене...">
+            </div>
+            <ul id="selectedAdditivesList" class="selected-additives-list form-group"></ul>
         </div>
-        @if(!empty($productAdditives))
-            <ul id="additivesList" class="additives-list form-group">
-                @foreach($productAdditives as $productAdditive)
-                    <li data-index="{{$productAdditive->id}}"><span>{{ $productAdditive->title }}</span><span>{{ $productAdditive->price }}</span></li>
-                @endforeach
-            </ul>
-        @endif
-        <hr>
-        <br>
-        <div class="row">
-            <h5>Избрани добавки</h5>
-        </div>
-        <div class="form-group ">
-            <input class="form-control width-p100" type="text" id="searchSelectedAdditivesList" placeholder="Търсене...">
-        </div>
-        <ul id="selectedAdditivesList" class="selected-additives-list form-group"></ul>
     </div>
-    <div class="col-md-6 col-xs-12">
-        <div class="row">
-            <h5>Списък БЕЗ</h5>
+    <div class="col-md-12 col-xs-12">
+        <div class="col-md-6 col-xs-12 p-r-30">
+            <div class="row">
+                <h5>Списък БЕЗ</h5>
+            </div>
+            <div class="form-group ">
+                <input class="form-control width-p100" type="text" id="searchWithout" placeholder="Търсене...">
+            </div>
+            @if(!empty($productAdditives))
+                <ul id="withoutList" class="additives-list form-group">
+                    @foreach($productAdditives as $productAdditive)
+                        <li data-index="{{ $productAdditive->id }}"><span>{{ $productAdditive->title }}</span><span>{{ $productAdditive->price }}</span></li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
-        <div class="form-group ">
-            <input class="form-control width-p100" type="text" id="searchWithout" placeholder="Търсене...">
+        <div class="col-md-6 col-xs-12">
+            <div class="row">
+                <h5>Избрани добавки</h5>
+            </div>
+            <div class="form-group ">
+                <input class="form-control width-p100" type="text" id="searchWithoutSelected" placeholder="Търсене...">
+            </div>
+            <ul id="selectedWithoutList" class="selected-additives-list form-group"></ul>
         </div>
-        @if(!empty($productAdditives))
-            <ul id="withoutList" class="additives-list form-group">
-                @foreach($productAdditives as $productAdditive)
-                    <li data-index="{{ $productAdditive->id }}"><span>{{ $productAdditive->title }}</span><span>{{ $productAdditive->price }}</span></li>
-                @endforeach
-            </ul>
-        @endif
-        <hr>
-        <br>
-        <div class="row">
-            <h5>Избрани добавки</h5>
-        </div>
-        <div class="form-group ">
-            <input class="form-control width-p100" type="text" id="searchWithoutSelected" placeholder="Търсене...">
-        </div>
-        <ul id="selectedWithoutList" class="selected-additives-list form-group"></ul>
     </div>
 </div>
 <div class="hidden">

@@ -29,7 +29,8 @@
             <div id="map"></div>
 
             <script>
-                // Инициализирайте картата
+                var polygons = [];
+
                 function initMap() {
                     var map = new google.maps.Map(document.getElementById('map'), {
                         zoom: 8,
@@ -47,78 +48,53 @@
 
                     drawingManager.setMap(map);
 
-                    var polygonCoordinates = {!! $retailObject->deliveryZone->polygon !!};
-                    var existingPolygon    = new google.maps.Polygon({
-                        paths: polygonCoordinates,
-                        strokeColor: '#ff0000',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                        fillColor: '#ff0000',
-                        fillOpacity: 0.35
-                    });
-                    existingPolygon.setMap(map);
-
-                    // При промяна на режима на рисуване, изтрийте съществуващия полигон
-                    google.maps.event.addListener(drawingManager, 'drawingmode_changed', function () {
-                        if (drawingManager.getDrawingMode() === 'polygon') {
-                            existingPolygon.setMap(null);
-                        }
-                    });
-
-                    google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
-                        // Изпратете полигоналните данни на сървъра
-                        var polygonData = polygon.getPath().getArray();
-                        savePolygonData(polygonData);
-
-                        // Изключете инструмента за рисуване след като полигонът е завършен
-                        drawingManager.setDrawingMode(null);
-                    });
-
-                    var address = 'софия, бул. рожен 10';
-                    checkAddressInPolygon(address, existingPolygon);
-                }
-
-                // Изпратете полигоналните данни на сървъра
-                function savePolygonData(polygonData) {
+                    // Load polygons from server
                     $.ajax({
-                        url: '{{route('admin.retail-objects-restaurants.delivery-zone.update', ['id' => $retailObject->id])}}',
-                        type: 'POST',
-                        data: JSON.stringify({polygon: polygonData}),
-                        contentType: 'application/json',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Ако използвате CSRF защита в Laravel
-                        },
+                        url: '{{route('admin.retail-objects-restaurants.delivery-zone.get', ['id' => $retailObject->id])}}',
+                        type: 'GET',
                         success: function (data) {
-                            alert(data);
+                            // Create a polygon for each set of coordinates
+                            data.polygons.forEach(function (polygonCoordinates) {
+                                var polygon = new google.maps.Polygon({
+                                    paths: polygonCoordinates,
+                                    strokeColor: '#ff0000',
+                                    strokeOpacity: 0.8,
+                                    strokeWeight: 2,
+                                    fillColor: '#ff0000',
+                                    fillOpacity: 0.35
+                                });
+                                polygon.setMap(map);
+                            });
                         },
                         error: function (error) {
                             console.error(error);
                         }
                     });
 
-                }
-
-                function checkAddressInPolygon(address, polygon) {
-                    var geocoder = new google.maps.Geocoder();
-
-                    geocoder.geocode({'address': address}, function (results, status) {
-                        if (status === 'OK') {
-                            var point    = results[0].geometry.location;
-                            var isInside = google.maps.geometry.poly.containsLocation(point, polygon);
-
-                            if (isInside) {
-                                console.log(address + ' is inside the polygon.');
-                            } else {
-                                console.log(address + ' is not inside the polygon.');
-                            }
-                        } else {
-                            console.log('Geocode was not successful for the following reason: ' + status);
-                        }
+                    google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+                        var polygonData = polygon.getPath().getArray();
+                        polygons.push(polygonData);
+                        savePolygonData(polygons);
                     });
                 }
 
-                $(document).ready(function () {
-                });
+                function savePolygonData(polygons) {
+                    $.ajax({
+                        url: '{{route('admin.retail-objects-restaurants.delivery-zone.update', ['id' => $retailObject->id])}}',
+                        type: 'POST',
+                        data: JSON.stringify({polygons: polygons}),
+                        contentType: 'application/json',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        success: function (data) {
+                            alert('Полигоните бяха записани');
+                        },
+                        error: function (error) {
+                            console.error(error);
+                        }
+                    });
+                }
 
             </script>
             <script src="https://maps.googleapis.com/maps/api/js?key={{ $GOOGLE_MAPS_API_KEY }}&libraries=drawing,places,geometry&callback=initMap" async defer></script>
