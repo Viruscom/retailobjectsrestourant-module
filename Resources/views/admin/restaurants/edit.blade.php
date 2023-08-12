@@ -96,6 +96,8 @@
                         </div>
                         @include('admin.partials.on_edit.form_fields.upload_file', ['model' => $retailObject, 'deleteRoute' => route('admin.retail-objects-restaurants.delete-image', ['id'=>$retailObject->id])])
                         @include('admin.partials.on_edit.active_checkbox', ['model' => $retailObject])
+                        <hr>
+                        @include('admin.partials.on_edit.position_in_site_button', ['model' => $retailObject, 'models' => $retailObjects])
                     </div>
                     @include('admin.partials.on_edit.form_actions_bottom')
                 </div>

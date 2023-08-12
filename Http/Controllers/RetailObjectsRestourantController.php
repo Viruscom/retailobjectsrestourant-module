@@ -41,7 +41,9 @@
             $action->storeSeo($request, $team, 'RetailObjects');
             RetailObjectsRestourant::cacheUpdate();
 
-            $team->storeAndAddNew($request);
+            if ($request->has('submitaddnew')) {
+                return redirect()->back()->with('success-message', 'admin.common.successful_create');
+            }
 
             return redirect()->route('admin.retail-objects-restaurants.index')->with('success-message', trans('admin.common.successful_create'));
         }
@@ -53,7 +55,8 @@
             return view('retailobjectsrestourant::admin.restaurants.edit', [
                 'retailObject'  => $retailObject,
                 'languages'     => LanguageHelper::getActiveLanguages(),
-                'fileRulesInfo' => RetailObjectsRestourant::getUserInfoMessage()
+                'fileRulesInfo' => RetailObjectsRestourant::getUserInfoMessage(),
+                'retailObjects' => Cache::get(CacheKeysHelper::$RETAIL_OBJECT_RESTAURANT_ADMIN)
             ]);
         }
         public function deleteMultiple(Request $request, CommonControllerAction $action): RedirectResponse

@@ -17,6 +17,7 @@
     use Astrotomic\Translatable\Translatable;
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\Relations\HasMany;
+    use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Str;
     use Modules\RetailObjectsRestourant\Models\DeliveryZones\DeliveryZone;
 
@@ -158,5 +159,38 @@
         public function workloads(): HasMany
         {
             return $this->hasMany(RetailObjectsRestaurantWorkload::class, 'ro_id', 'id');
+        }
+
+        public function updatedPosition($request)
+        {
+            if (!$request->has('position') || is_null($request->position) || $request->position == $this->position) {
+                return $this->position;
+            }
+
+            $models = self::orderBy('position', 'desc')->get();
+
+            if ($models->count() == 1) {
+                return 1;
+            }
+
+            $maxPosition = $models->first()->position;
+            $minPosition = $models->last()->position;
+            $newPosition = max(min($request['position'], $maxPosition), $minPosition);
+
+            DB::transaction(function () use ($newPosition) {
+                if ($newPosition > $this->position) {
+                    self::where('id', '<>', $this->id)
+                        ->whereBetween('position', [$this->position + 1, $newPosition])
+                        ->decrement('position');
+                } else {
+                    self::where('id', '<>', $this->id)
+                        ->whereBetween('position', [$newPosition, $this->position - 1])
+                        ->increment('position');
+                }
+
+                $this->update(['position' => $newPosition]);
+            });
+
+            return $newPosition;
         }
     }
