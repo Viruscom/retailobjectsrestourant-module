@@ -33,7 +33,8 @@
             ),
         'restaurants_working_time'  =>
             array(
-                'index' => 'Работно време',
+                'index'      => 'Работно време',
+                'exceptions' => 'Работно време / Изключения',
             ),
         'product_additives'         =>
             array(

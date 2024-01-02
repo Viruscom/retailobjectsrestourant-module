@@ -10,7 +10,7 @@
     <div id="collapseRetailObjectsRestaurant" class="panel-collapse collapse" role="tabpanel" aria-labelledby="retailObjectsRestaurant">
         <div class="panel-body">
             <ul class="nav">
-                <li><a href="{{ route('admin.retail-objects-restaurants.index') }}" class="{{ WebsiteHelper::isActiveRoute('admin.retail-objects-restaurants.*') ? 'active' : '' }}"><i class="fas fa-copyright"></i> <span>{{ __('retailobjectsrestourant::admin.retail_object') }}</span></a></li>
+                <li><a href="{{ route('admin.retail-objects-restaurants.index') }}" class="{{ WebsiteHelper::isActiveRoute('admin.retail-objects-restaurants.*') ? 'active' : '' }}"><img src="{{ asset('admin/assets/images/restaurants.svg') }}" width="20" height="20"> <span>{{ __('retailobjectsrestourant::admin.retail_object') }}</span></a></li>
                 <li><a href="{{ route('admin.retail-objects-restaurants.settings.index') }}" class="{{ WebsiteHelper::isActiveRoute('admin.retail-objects-restaurants.settings.*') ? 'active' : '' }}"><i class="fas fa-cogs"></i> <span>{{ __('retailobjectsrestourant::admin.settings.index') }}</span></a></li>
             </ul>
         </div>

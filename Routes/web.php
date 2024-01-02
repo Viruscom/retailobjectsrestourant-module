@@ -68,11 +68,12 @@
                 Route::group(['prefix' => 'workload'], static function () {
                     Route::get('/', [RetailObjectsRestourantController::class, 'workload'])->name('admin.retail-objects-restaurants.workload.index');
                     Route::post('update', [RetailObjectsRestourantController::class, 'workloadUpdate'])->name('admin.retail-objects-restaurants.workload.update');
-                });
 
-                /* Restaurant Priorities */
-                Route::group(['prefix' => 'priorities'], static function () {
-                    Route::post('update', [RetailObjectsRestourantController::class, 'restaurantPriorityUpdate'])->name('admin.retail-objects-restaurants.priorities.update');
+                    /* Exceptions */
+                    Route::group(['prefix' => 'exceptions'], static function () {
+                        Route::get('/', [RetailObjectsRestourantController::class, 'workloadExceptions'])->name('admin.retail-objects-restaurants.workload.exceptions.index');
+                        Route::post('update', [RetailObjectsRestourantController::class, 'workloadExceptionsUpdate'])->name('admin.retail-objects-restaurants.workload.exceptions.update');
+                    });
                 });
             });
         });

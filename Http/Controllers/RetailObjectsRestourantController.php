@@ -11,9 +11,9 @@
     use Illuminate\Http\Request;
     use Illuminate\Routing\Controller;
     use Illuminate\Support\Facades\Cache;
-    use Modules\RetailObjects\Http\Requests\RetailObjectStoreRequest;
-    use Modules\RetailObjects\Http\Requests\RetailObjectsUpdateRequest;
     use Modules\RetailObjectsRestourant\Http\Requests\RestaurantPriorityUpdateRequest;
+    use Modules\RetailObjectsRestourant\Http\Requests\RetailObjectStoreRequest;
+    use Modules\RetailObjectsRestourant\Http\Requests\RetailObjectsUpdateRequest;
     use Modules\RetailObjectsRestourant\Http\Requests\WorkloadRequest;
     use Modules\RetailObjectsRestourant\Models\RestaurantPriority;
     use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantSettings;
@@ -242,6 +242,28 @@
         }
 
         public function restaurantPriorityUpdate($id, RestaurantPriorityUpdateRequest $request)
+        {
+            $retailObject = RetailObjectsRestourant::where('id', $id)->first();
+            MainHelper::goBackIfNull($retailObject);
+
+            RestaurantPriority::updateOrCreate(
+                ['ro_id' => $retailObject->id],
+                ['workload_priority_status' => $request->workload_priority_status]
+            );
+
+            return response()->json(['message' => 'Priority status updated or created successfully.']);
+        }
+
+        public function workloadExceptions($id)
+        {
+            $retailObject = RetailObjectsRestourant::where('id', $id)->with('workloads')->first();
+            MainHelper::goBackIfNull($retailObject);
+            $workloadData = $retailObject->workloads->groupBy('workload_status');
+
+            return view('retailobjectsrestourant::admin.restaurants.workload_exceptions', compact('retailObject', 'workloadData'));
+        }
+
+        public function workloadExceptionsUpdate($id, RestaurantPriorityUpdateRequest $request)
         {
             $retailObject = RetailObjectsRestourant::where('id', $id)->first();
             MainHelper::goBackIfNull($retailObject);
