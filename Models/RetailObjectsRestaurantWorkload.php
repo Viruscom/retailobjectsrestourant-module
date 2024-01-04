@@ -46,10 +46,10 @@
         public static function frontStatusMapping($workloadStatus): string
         {
             $statuses = [
-                self::WORKLOAD_STATUS_WEAK        => 'Доставка до 45 минути',
-                self::WORKLOAD_STATUS_MODERATELY  => 'Доставка до 45 минути',
-                self::WORKLOAD_STATUS_STRONG      => 'Доставка до 45 минути',
-                self::WORKLOAD_STATUS_VERY_STRONG => 'Доставка до 45 минути',
+                self::WORKLOAD_STATUS_WEAK        => 'Доставка до 40 минути',
+                self::WORKLOAD_STATUS_MODERATELY  => 'Доставка до 60 минути',
+                self::WORKLOAD_STATUS_STRONG      => 'Доставка до 75 минути',
+                self::WORKLOAD_STATUS_VERY_STRONG => 'Доставка до 90 минути',
                 self::WORKLOAD_STATUS_CLOSED      => 'Ще бъде изпълнено след отваряне на заведението',
             ];
 

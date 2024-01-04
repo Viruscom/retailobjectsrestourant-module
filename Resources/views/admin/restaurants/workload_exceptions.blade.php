@@ -3,7 +3,7 @@
 @section('content')
     @include('retailobjectsrestourant::admin.restaurants.breadcrumbs')
     @include('admin.notify')
-    <form class="my-form" action="{{ route('admin.retail-objects-restaurants.workload.update', ['id' => $retailObject->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
+    <form class="my-form" action="{{ route('admin.retail-objects-restaurants.workload.exceptions.update', ['id' => $retailObject->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
         <span class="hidden curr-editor"></span>
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -38,22 +38,22 @@
                                     <td>
                                         <div style="display: flex;">
                                             <div class="form-group m-r-10 m-b-0">
-                                                <input type="time" class="form-control" name="workload[{{$workloadStatus}}][{{$dayOfWeek}}][form_time]" value="{{ old('workload.' . $workloadStatus . '.' . $dayOfWeek . '.form_time', $workloadData[$workloadStatus][$dayOfWeek]['from_hour'] ?? '') }}" required disabled>
+                                                <input type="time" class="form-control" name="workload[{{$workloadStatus}}][{{$dayOfWeek}}][form_time]" value="{{ old('workload.' . $workloadStatus . '.' . $dayOfWeek . '.form_time', $workloadData[$workloadStatus][$dayOfWeek]['from_hour'] ?? '') }}" required>
 
                                             </div>
                                             <div class="form-group m-b-0">
-                                                <input type="time" class="form-control" name="workload[{{$workloadStatus}}][{{$dayOfWeek}}][to_time]" value="{{ old('workload.' . $workloadStatus . '.' . $dayOfWeek . '.to_time', $workloadData[$workloadStatus][$dayOfWeek]['to_hour'] ?? '') }}" required disabled>
+                                                <input type="time" class="form-control" name="workload[{{$workloadStatus}}][{{$dayOfWeek}}][to_time]" value="{{ old('workload.' . $workloadStatus . '.' . $dayOfWeek . '.to_time', $workloadData[$workloadStatus][$dayOfWeek]['to_hour'] ?? '') }}" required>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group m-b-0">
-                                            <select name="workload[{{RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_WEAK}}][{{$dayOfWeek}}][extraordinary_status]">
-                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_WEAK }}">Слабо</option>
-                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_MODERATELY }}">Умерено</option>
-                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_STRONG }}">Силно</option>
-                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_VERY_STRONG }}">Много силно</option>
-                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_CLOSED }}">Затворено</option>
+                                            <select name="workload[{{$workloadStatus}}][{{$dayOfWeek}}][extraordinary_status]">
+                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_WEAK }}" {{ $workloadData[$workloadStatus][$dayOfWeek]['extraordinary_status'] == RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_WEAK ? 'selected':'' }}>Слабо</option>
+                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_MODERATELY }}" {{ $workloadData[$workloadStatus][$dayOfWeek]['extraordinary_status'] == RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_MODERATELY ? 'selected':'' }}>Умерено</option>
+                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_STRONG }}" {{ $workloadData[$workloadStatus][$dayOfWeek]['extraordinary_status'] == RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_STRONG ? 'selected':'' }}>Силно</option>
+                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_VERY_STRONG }}" {{ $workloadData[$workloadStatus][$dayOfWeek]['extraordinary_status'] == RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_VERY_STRONG ? 'selected':'' }}>Много силно</option>
+                                                <option value="{{ RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_CLOSED }}" {{ $workloadData[$workloadStatus][$dayOfWeek]['extraordinary_status'] == RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_CLOSED ? 'selected':'' }}>Затворено</option>
                                             </select>
                                         </div>
                                     </td>

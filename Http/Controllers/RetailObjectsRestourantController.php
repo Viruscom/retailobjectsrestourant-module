@@ -11,11 +11,9 @@
     use Illuminate\Http\Request;
     use Illuminate\Routing\Controller;
     use Illuminate\Support\Facades\Cache;
-    use Modules\RetailObjectsRestourant\Http\Requests\RestaurantPriorityUpdateRequest;
     use Modules\RetailObjectsRestourant\Http\Requests\RetailObjectStoreRequest;
     use Modules\RetailObjectsRestourant\Http\Requests\RetailObjectsUpdateRequest;
     use Modules\RetailObjectsRestourant\Http\Requests\WorkloadRequest;
-    use Modules\RetailObjectsRestourant\Models\RestaurantPriority;
     use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantSettings;
     use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantWorkload;
     use Modules\RetailObjectsRestourant\Models\RetailObjectsRestourant;
@@ -215,11 +213,8 @@
 
             $workloadData = $request->input('workload');
 
-            // Обхождане на всеки ден от седмицата
             foreach ($workloadData as $workloadStatus => $workloads) {
-                // Обхождане на всеки интервал от време за деня
                 foreach ($workloads as $dayOfWeek => $workload) {
-                    // Подготовка на данните за обновление или вмъкване
                     $data = [
                         'ro_id'                    => $retailObject->id,
                         'day_of_week'              => $dayOfWeek,
@@ -241,38 +236,37 @@
             return redirect()->back()->with('success-message', 'Работната натовареност е обновена успешно.');
         }
 
-        public function restaurantPriorityUpdate($id, RestaurantPriorityUpdateRequest $request)
-        {
-            $retailObject = RetailObjectsRestourant::where('id', $id)->first();
-            MainHelper::goBackIfNull($retailObject);
-
-            RestaurantPriority::updateOrCreate(
-                ['ro_id' => $retailObject->id],
-                ['workload_priority_status' => $request->workload_priority_status]
-            );
-
-            return response()->json(['message' => 'Priority status updated or created successfully.']);
-        }
-
         public function workloadExceptions($id)
         {
             $retailObject = RetailObjectsRestourant::where('id', $id)->with('workloads')->first();
             MainHelper::goBackIfNull($retailObject);
+            if ($retailObject->workloads->count() < 35) {
+                return redirect()->back()->withErrors(['Моля, първо попълнете всички полета в работно време.']);
+            }
+
             $workloadData = $retailObject->workloads->groupBy('workload_status');
 
             return view('retailobjectsrestourant::admin.restaurants.workload_exceptions', compact('retailObject', 'workloadData'));
         }
 
-        public function workloadExceptionsUpdate($id, RestaurantPriorityUpdateRequest $request)
+        public function workloadExceptionsUpdate($id, Request $request)
         {
             $retailObject = RetailObjectsRestourant::where('id', $id)->first();
             MainHelper::goBackIfNull($retailObject);
 
-            RestaurantPriority::updateOrCreate(
-                ['ro_id' => $retailObject->id],
-                ['workload_priority_status' => $request->workload_priority_status]
-            );
+            foreach ($request->workload as $status => $data) {
+                foreach ($data as $dayOfWeek => $workloadDetails)
+                    $retailObject->workloads()
+                        ->where('day_of_week', $dayOfWeek)
+                        ->where('workload_status', $status)
+                        ->where('from_hour', $workloadDetails['form_time'])
+                        ->where('to_hour', $workloadDetails['to_time'])
+                        ->update([
+                                     'has_extraordinary_status' => isset($workloadDetails['has_extraordinary_status']) ? filter_var($workloadDetails['has_extraordinary_status'], FILTER_VALIDATE_BOOLEAN) : false,
+                                     'extraordinary_status'     => $workloadDetails['extraordinary_status'],
+                                 ]);
+            }
 
-            return response()->json(['message' => 'Priority status updated or created successfully.']);
+            return redirect()->back()->with('success-message', 'Работната натовареност е обновена успешно.');
         }
     }
