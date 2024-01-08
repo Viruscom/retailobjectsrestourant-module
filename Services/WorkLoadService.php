@@ -9,13 +9,11 @@
     {
         public static function getCurrentWorkloadStatus(): string
         {
-            $result = collect(['status' => 'error', 'workLoadStatus' => RetailObjectsRestaurantWorkload::frontStatusMapping(RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_VERY_STRONG)]);
-
             if (session()->get('delivery_restaurant') == null) {
-                return $result;
+                return collect(['status' => 'error', 'workLoadStatus' => RetailObjectsRestaurantWorkload::frontStatusMapping(RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_VERY_STRONG)]);
             }
 
-            $time        = Carbon::now();
+            $time        = Carbon::now()->locale(config('default.app.language.code'));
             $currentTime = $time->format('H:i:s');
 
             $restaurant = session()->get('delivery_restaurant');
@@ -26,7 +24,7 @@
                 ->first();
 
             if (is_null($workload)) {
-                return $result;
+                return collect(['status' => 'error', 'workLoadStatus' => RetailObjectsRestaurantWorkload::frontStatusMapping(RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_CLOSED)]);
             }
 
             if ($workload->has_extraordinary_status) {
