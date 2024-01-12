@@ -34,7 +34,7 @@
                                 <td>{{ $retailObject->title }}</td>
                                 <td>{{ $retailObject->email }}</td>
                                 <td class="pull-right">
-                                    <a href="{{ route('admin.retail-objects-restaurants.workload.exceptions.index', ['id' => $retailObject->id]) }}" class="btn btn-light-purple m-b-0 tooltips" role="button" data-toggle="tooltip" data-placement="auto" title="" data-original-title="{{ __('retailobjectsrestourant::admin.restaurants_working_time.index') }}"><i class="fas fa-bell"></i></a>
+                                    <a href="{{ route('admin.retail-objects-restaurants.workload.exceptions.index', ['id' => $retailObject->id]) }}" class="btn btn-light-purple m-b-0 tooltips" role="button" data-toggle="tooltip" data-placement="auto" title="" data-original-title="Работно време / Изключения"><i class="fas fa-bell"></i></a>
                                     <a href="{{ route('admin.retail-objects-restaurants.workload.index', ['id' => $retailObject->id]) }}" class="btn btn-light-purple m-b-0 tooltips" role="button" data-toggle="tooltip" data-placement="auto" title="" data-original-title="{{ __('retailobjectsrestourant::admin.restaurants_working_time.index') }}"><i class="fas fa-calendar-alt"></i></a>
                                     <a href="{{ route('admin.retail-objects-restaurants.delivery-zone.index', ['id' => $retailObject->id]) }}" class="btn btn-blue tooltips" role="button" data-toggle="tooltip" data-placement="auto" title="" data-original-title="{{ __('retailobjectsrestourant::admin.restaurants_delivery_zone.index') }}"><i class="fas fa-map-marked-alt"></i></a>
 

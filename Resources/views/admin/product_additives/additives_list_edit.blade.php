@@ -13,7 +13,9 @@
             @if(!empty($productAdditives))
                 <ul id="additivesList" class="additives-list form-group">
                     @foreach($productAdditives as $productAdditive)
-                        <li data-index="{{$productAdditive->id}}"><span>{{ $productAdditive->title }}</span><span>{{ $productAdditive->price }}</span></li>
+                        @if($productAdditive->price != '0.00')
+                            <li data-index="{{$productAdditive->id}}"><span>{{ $productAdditive->title }}</span><span>{{ $productAdditive->price }}</span></li>
+                        @endif
                     @endforeach
                 </ul>
             @endif
@@ -39,7 +41,9 @@
             @if(!empty($productAdditives))
                 <ul id="withoutList" class="additives-list form-group">
                     @foreach($productAdditives as $productAdditive)
-                        <li data-index="{{ $productAdditive->id }}"><span>{{ $productAdditive->title }}</span><span>{{ $productAdditive->price }}</span></li>
+                        @if($productAdditive->price == '0.00')
+                            <li data-index="{{ $productAdditive->id }}"><span>{{ $productAdditive->title }}</span><span>{{ $productAdditive->price }}</span></li>
+                        @endif
                     @endforeach
                 </ul>
             @endif

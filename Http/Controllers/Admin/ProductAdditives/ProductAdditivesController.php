@@ -6,6 +6,7 @@
     use App\Helpers\CacheKeysHelper;
     use App\Helpers\LanguageHelper;
     use App\Helpers\MainHelper;
+    use App\Helpers\ModuleHelper;
     use App\Helpers\WebsiteHelper;
     use App\Http\Controllers\Controller;
     use Illuminate\Http\RedirectResponse;
@@ -15,6 +16,7 @@
     use Modules\RetailObjectsRestourant\Http\Requests\ProductAdditiveUpdateRequest;
     use Modules\RetailObjectsRestourant\Models\ProductAdditive;
     use Modules\RetailObjectsRestourant\Models\ProductAdditiveTranslation;
+    use Modules\YanakSoftApi\Entities\YanakProduct;
 
     class ProductAdditivesController extends Controller
     {
@@ -45,10 +47,21 @@
                 ProductAdditive::cacheUpdate();
             }
 
-            return view('retailobjectsrestourant::admin.product_additives.edit', [
+            $activeModules = ModuleHelper::getActiveModules();
+            $data          = [
+                'languages'     => LanguageHelper::getActiveLanguages(),
+                'activeModules' => $activeModules,
                 'productCharacteristic' => $productAdditive,
-                'languages'             => LanguageHelper::getActiveLanguages(),
-            ]);
+            ];
+
+            if (array_key_exists('YanakSoftApi', $activeModules)) {
+                if (is_null(CacheKeysHelper::$YANAK_API_PRODUCTS_ADMIN)) {
+                    YanakProduct::cacheUpdate();
+                }
+                $data['yanakProducts'] = cache()->get(CacheKeysHelper::$YANAK_API_PRODUCTS_ADMIN);
+            }
+
+            return view('retailobjectsrestourant::admin.product_additives.edit', $data);
         }
         public function deleteMultiple(Request $request, CommonControllerAction $action): RedirectResponse
         {
@@ -94,8 +107,19 @@
         }
         public function create()
         {
-            return view('retailobjectsrestourant::admin.product_additives.create', [
-                'languages' => LanguageHelper::getActiveLanguages()
-            ]);
+            $activeModules = ModuleHelper::getActiveModules();
+            $data          = [
+                'languages'     => LanguageHelper::getActiveLanguages(),
+                'activeModules' => $activeModules,
+            ];
+
+            if (array_key_exists('YanakSoftApi', $activeModules)) {
+                if (is_null(CacheKeysHelper::$YANAK_API_PRODUCTS_ADMIN)) {
+                    YanakProduct::cacheUpdate();
+                }
+                $data['yanakProducts'] = cache()->get(CacheKeysHelper::$YANAK_API_PRODUCTS_ADMIN);
+            }
+
+            return view('retailobjectsrestourant::admin.product_additives.create', $data);
         }
     }

@@ -13,7 +13,9 @@
     use Illuminate\Support\Facades\Cache;
     use Modules\RetailObjectsRestourant\Http\Requests\RetailObjectStoreRequest;
     use Modules\RetailObjectsRestourant\Http\Requests\RetailObjectsUpdateRequest;
+    use Modules\RetailObjectsRestourant\Http\Requests\RestaurantPriorityUpdateRequest;
     use Modules\RetailObjectsRestourant\Http\Requests\WorkloadRequest;
+    use Modules\RetailObjectsRestourant\Models\RestaurantPriority;
     use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantSettings;
     use Modules\RetailObjectsRestourant\Models\RetailObjectsRestaurantWorkload;
     use Modules\RetailObjectsRestourant\Models\RetailObjectsRestourant;

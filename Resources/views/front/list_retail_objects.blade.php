@@ -1,19 +1,4 @@
-<div class="section-maps">
-
-    <div class="map-element">
-        <div class="map-wrapper" data-aos="fade-up" data-aos-delay="50">
-            <iframe class="map" allowfullscreen="" frameborder="0" width="100%" height="550" src="{{ $retailObject->map_iframe }}"></iframe>
-        </div>
-
-        <h4></h4>
-
-        <p></p>
-        <p>tel. <a href="tel:{!! $retailObject->phone !!}"></a></p>
-        <p><a href="mailto:">{!! $retailObject->email !!}</a></p>
-    </div>
-
-</div>
-
+@php use Modules\RetailObjectsRestourant\Services\WorkLoadService; @endphp
 <div class="contact-boxes">
     <div class="shell">
         <div class="boxes-wrapper">
@@ -48,7 +33,11 @@
                         {{ $retailObject->address }}
                     </a>
 
-                    <p class="label-info label-info-open">В момента е отворено!</p>
+                    @if(WorkLoadService::isRestaurantOpen($retailObject->parent))
+                        <p class="label-info label-info-open">В момента е отворено!</p>
+                    @else
+                        <p class="label-info label-info-closed">В момента е затворено!</p>
+                    @endif
 
                     <a href="{{ $retailObject->url }}" class="btn btn-black">{{ __('front.see_more') }}</a>
                 </div>

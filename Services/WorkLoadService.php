@@ -7,6 +7,16 @@
 
     class WorkLoadService
     {
+        /**
+         * Връща текущия ден от седмицата, като понеделник е 0.
+         *
+         * @return int Денят от седмицата, където 0 е понеделник, 1 е вторник, ..., 6 е неделя
+         */
+        public function getDayOfWeek(): int
+        {
+            return Carbon::now()->dayOfWeek;
+        }
+
         public static function getCurrentWorkloadStatus(): string
         {
             if (session()->get('delivery_restaurant') == null) {
@@ -35,13 +45,31 @@
 
             return collect(['status' => 'success', 'workload' => $workload, 'workLoadStatus' => RetailObjectsRestaurantWorkload::frontStatusMapping($workloadStatus)]);
         }
-        /**
-         * Връща текущия ден от седмицата, като понеделник е 0.
-         *
-         * @return int Денят от седмицата, където 0 е понеделник, 1 е вторник, ..., 6 е неделя
-         */
-        public function getDayOfWeek(): int
+
+        public static function isRestaurantOpen($restaurant)
         {
-            return Carbon::now()->dayOfWeek;
+            $time        = Carbon::now()->locale(config('default.app.language.code'));
+            $currentTime = $time->format('H:i:s');
+
+            $workload = $restaurant->workloads()
+                ->where('day_of_week', $time->dayOfWeek)
+                ->where('from_hour', '<=', $currentTime)
+                ->where('to_hour', '>=', $currentTime)
+                ->first();
+
+            if (is_null($workload)) {
+                return false;
+            }
+
+            if ($workload->has_extraordinary_status) {
+                $workloadStatus = $workload->extraordinary_status;
+            } else {
+                $workloadStatus = $workload->workload_status;
+            }
+            if ($workloadStatus == RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_CLOSED || $workloadStatus == RetailObjectsRestaurantWorkload::WORKLOAD_STATUS_ORDERS_STOPPED) {
+                return false;
+            }
+
+            return true;
         }
     }

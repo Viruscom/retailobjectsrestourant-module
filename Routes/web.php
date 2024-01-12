@@ -20,7 +20,8 @@
 
     /* Google Geocoding API */
     Route::group(['prefix' => 'geocoding'], static function () {
-        Route::get('get-address-coordinates', [HomeController::class, 'getAddressCoordinates'])->name('google.geocoding-api.get-address-coordinates');
+        Route::post('get-address-coordinates', [HomeController::class, 'getAddressCoordinates'])->name('google.geocoding-api.get-address-coordinates');
+        Route::post('get-address-coordinates-reg-user-shipment-addresses', [HomeController::class, 'getAddressCoordinatesRegUser'])->name('google.geocoding-api.get-address-coordinates-reg-user-shipment-addresses');
     });
 
     Route::group(['prefix' => 'admin', 'middleware' => ['auth']], static function () {
@@ -75,6 +76,7 @@
                         Route::post('update', [RetailObjectsRestourantController::class, 'workloadExceptionsUpdate'])->name('admin.retail-objects-restaurants.workload.exceptions.update');
                     });
                 });
+
             });
         });
 

@@ -193,4 +193,28 @@
 
             return $newPosition;
         }
+
+        public function isPointInPolygon($point, $polygonJSON): bool
+        {
+            $polygon = json_decode($polygonJSON, true);
+            $c = 0;
+            $p1 = $polygon[0];
+            $n = count($polygon);
+
+            for ($i = 1; $i <= $n; $i++) {
+                $p2 = $polygon[$i % $n];
+                if ($point['lng'] > min($p1['lng'], $p2['lng'])
+                    && $point['lng'] <= max($p1['lng'], $p2['lng'])
+                    && $point['lat'] <= max($p1['lat'], $p2['lat'])
+                    && $p1['lng'] != $p2['lng']) {
+                    $xinters = ($point['lng'] - $p1['lng']) * ($p2['lat'] - $p1['lat']) / ($p2['lng'] - $p1['lng']) + $p1['lat'];
+                    if ($p1['lat'] == $p2['lat'] || $point['lat'] <= $xinters) {
+                        $c++;
+                    }
+                }
+                $p1 = $p2;
+            }
+
+            return $c % 2 != 0;
+        }
     }

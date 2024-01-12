@@ -1,5 +1,16 @@
 @extends('layouts.admin.app')
+@section('styles')
+    <link href="{{ asset('admin/assets/css/select2.min.css') }}" rel="stylesheet"/>
+@endsection
 
+@section('scripts')
+    <script src="{{ asset('admin/assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/ckeditor/ckeditor.js') }}"></script>
+    <script>
+        $(".select2").select2({language: "bg"});
+        $('.select2').css('min-width', '100%');
+    </script>
+@endsection
 @section('content')
     @include('retailobjectsrestourant::admin.product_additives.breadcrumbs')
     @include('admin.notify')
@@ -43,6 +54,11 @@
                         <hr>
                         <div class="col-md-6">
                             @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'price', 'label' => trans('retailobjectsrestourant::admin.product_additives.price'), 'required' => true, 'model' => $productCharacteristic])
+                        </div>
+                        <div class="col-md-6">
+                            @if(array_key_exists('YanakSoftApi', $activeModules))
+                                @include('yanaksoftapi::admin.partials.on_edit_select', ['fieldName' => 'stk_idnumb', 'label' => trans('shop::admin.yanak_soft_api.choose_product'), 'models' => $yanakProducts, 'modelId' => $productCharacteristic->stk_idnumb, 'required' => true, 'labelClass' => 'select-label-fix', 'class' => 'select-fix', 'withPleaseSelect' => true])
+                            @endif
                         </div>
                     </div>
 

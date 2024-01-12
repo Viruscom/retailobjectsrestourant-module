@@ -18,7 +18,8 @@ class ProductAdditive extends Model implements TranslatableContract
 
     public array $translatedAttributes = ['title'];
     protected    $table                = 'product_additives';
-    protected    $fillable             = ['price'];
+    protected    $fillable             = ['price', 'stk_idnumb'];
+
     public static function cacheUpdate()
     {
         Cache::forget(CacheKeysHelper::$SHOP_PRODUCT_ADDITIVES);
@@ -31,7 +32,8 @@ class ProductAdditive extends Model implements TranslatableContract
     public static function getRequestData($request): array
     {
         return [
-            'price' => $request->price
+            'price' => $request->price,
+            'stk_idnumb' => $request->stk_idnumb,
         ];
     }
 

@@ -13,7 +13,6 @@
             max-height: 400px;
             overflow-y: scroll;
         }
-
         .time-picker {
             max-width: 60px;
         }

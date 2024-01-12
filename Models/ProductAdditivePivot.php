@@ -15,7 +15,7 @@ class ProductAdditivePivot extends Model
         'product_id',
         'price',
         'quantity',
-        'in_without_list'
+        'in_without_list',
     ];
     public static function updateAdditives(Product $product, array $selectedAdditives, array $selectedAdditivesWithoutList)
     {
